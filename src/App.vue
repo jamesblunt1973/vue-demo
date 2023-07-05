@@ -54,6 +54,19 @@ async function deleteData(todo: Todo) {
   todos.value = todos.value.filter((a) => a.id !== todo.id);
 }
 
+async function postData(todo: Todo) {
+  const res = await fetch(env.VITE_API_URL, {
+    method: 'POST',
+    body: JSON.stringify(todo)
+  });
+  if (!res.ok) {
+    // todo.updateStatus = { status: res.status, statusText: res.statusText };
+    return;
+  }
+  const data = await res.json();
+  todos.value = [...todos.value, todo];
+}
+
 getData();
 </script>
 <script setup></script>
@@ -65,7 +78,7 @@ getData();
       <img src="/loading.svg" />
     </template>
     <template v-if="todos.length > 0">
-      <new-todo />
+      <newTodo @newTodo="postData"></newTodo>
       <todoItem
         v-for="todo in todos"
         :key="todo.id"

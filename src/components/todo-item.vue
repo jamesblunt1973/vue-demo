@@ -12,7 +12,7 @@ const showText: Ref<boolean> = ref(false);
 </script>
 
 <template>
-  <v-card>
+  <v-card class="mb-4">
     <v-card-item>
       <v-card-title>
         <div class="indicator" :class="{ done: isDone }"></div>
@@ -42,14 +42,12 @@ const showText: Ref<boolean> = ref(false);
       </v-card-title>
     </v-card-item>
 
-    <v-card-text v-if="showText">{{ description }}</v-card-text>
+    <v-card-text class="pt-4" v-if="showText">{{ description }}</v-card-text>
   </v-card>
 </template>
 
 <style scoped>
 .v-card {
-  margin-bottom: 10px;
-
   .v-card-title {
     user-select: none;
     display: flex;
