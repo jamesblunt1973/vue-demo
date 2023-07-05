@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue';
 import { ref } from 'vue';
+import newTodo from './components/new-todo.vue';
 import todoItem from './components/todo-item.vue';
 import type { ApiError } from './models/error';
 import type { Todo } from './models/todo';
@@ -64,6 +65,7 @@ getData();
       <img src="/loading.svg" />
     </template>
     <template v-if="todos.length > 0">
+      <new-todo />
       <todoItem
         v-for="todo in todos"
         :key="todo.id"
