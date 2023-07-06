@@ -15,7 +15,7 @@ const showText: Ref<boolean> = ref(false);
   <v-card class="mb-4">
     <v-card-item>
       <v-card-title>
-        <div class="indicator" :class="{ done: isDone }"></div>
+        <div class="indicator bg-red-accent-3" :class="{ 'bg-green-accent-3': isDone }"></div>
         <p class="title">{{ title }}</p>
         <div class="commands">
           <v-checkbox
@@ -41,12 +41,12 @@ const showText: Ref<boolean> = ref(false);
         </div>
       </v-card-title>
     </v-card-item>
-
+    <v-divider></v-divider>
     <v-card-text class="pt-4" v-if="showText">{{ description }}</v-card-text>
   </v-card>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .v-card {
   .v-card-title {
     user-select: none;
@@ -56,15 +56,9 @@ const showText: Ref<boolean> = ref(false);
     .indicator {
       width: 4px;
       position: absolute;
-      background-color: #f77;
       height: 100%;
       top: 0;
       left: 0;
-      border-radius: 4px 0 0 4px;
-
-      &.done {
-        background-color: #7f7;
-      }
     }
 
     .title {

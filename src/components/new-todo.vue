@@ -37,26 +37,33 @@ function reset() {
 </script>
 
 <template>
-  <v-card class="mb-4">
-    <v-card-item>
-      <v-card-title>New Todo Item</v-card-title>
-    </v-card-item>
-    <v-card-text>
-      <v-text-field label="Title" v-model="todo.title"></v-text-field>
-      <v-textarea
-        clearable
-        clear-icon="mdi-close-circle"
-        label="Description"
-        rows="4"
-        v-model="todo.description"
-      ></v-textarea>
-      <v-text-field label="Due date" v-model="date"></v-text-field>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn color="primary" @click="submit">Send</v-btn>
-      <v-btn color="error" @click="reset">Reset</v-btn>
-    </v-card-actions>
-  </v-card>
+  <v-expansion-panels class="mb-4">
+    <v-expansion-panel>
+      <v-expansion-panel-title>
+        New Todo Item
+        <template v-slot:actions="{ expanded }">
+          <v-icon
+            :color="!expanded ? 'green' : 'blue'"
+            :icon="expanded ? 'mdi-pencil' : 'mdi-plus-circle'"
+          ></v-icon>
+        </template>
+      </v-expansion-panel-title>
+      <v-expansion-panel-text class="pt-4">
+        <v-text-field label="Title" v-model="todo.title"></v-text-field>
+        <v-textarea
+          clearable
+          clear-icon="mdi-close-circle"
+          label="Description"
+          rows="4"
+          v-model="todo.description"
+        ></v-textarea>
+        <v-text-field label="Due date" v-model="date"></v-text-field>
+
+        <v-btn variant="text" color="primary" @click="submit">Send</v-btn>
+        <v-btn variant="text" color="error" @click="reset">Reset</v-btn>
+      </v-expansion-panel-text>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <style scoped></style>
