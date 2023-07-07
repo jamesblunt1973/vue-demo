@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { Todo } from '@/models/todo';
 import { DateTime } from 'luxon';
-import { computed, reactive, toRaw } from 'vue';
+import { computed, reactive, ref, toRaw } from 'vue';
+import { useTodosStore } from '../stores/todo.store';
+
+const todoState = useTodosStore();
 
 const todo: Todo = reactive({
   description: '',
@@ -10,6 +13,7 @@ const todo: Todo = reactive({
   isDone: false,
   title: ''
 });
+const loading = ref(false);
 const date = computed({
   get() {
     return DateTime.fromJSDate(todo.duoDate).toISODate() as string;
@@ -19,12 +23,10 @@ const date = computed({
   }
 });
 
-const emit = defineEmits<{
-  (e: 'newTodo', val: Todo): void;
-}>();
-
-function submit() {
-  emit('newTodo', { ...toRaw(todo) });
+async function submit() {
+  loading.value = true;
+  await todoState.addTodo({ ...toRaw(todo) });
+  loading.value = false;
   reset();
 }
 
@@ -40,6 +42,12 @@ function reset() {
   <v-expansion-panels class="mb-4">
     <v-expansion-panel>
       <v-expansion-panel-title>
+        <v-progress-linear
+          color="primary"
+          indeterminate
+          class="rounded-t"
+          v-if="loading"
+        ></v-progress-linear>
         New Todo Item
         <template v-slot:actions="{ expanded }">
           <v-icon
@@ -66,4 +74,8 @@ function reset() {
   </v-expansion-panels>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-progress-linear {
+  position: absolute;
+}
+</style>

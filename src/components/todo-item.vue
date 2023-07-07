@@ -1,36 +1,43 @@
 <script setup lang="ts">
 import { ref, toRef, type Ref } from 'vue';
 import type { Todo } from '../models/todo';
+import { useTodosStore } from '../stores/todo.store';
+
+const todoState = useTodosStore();
 
 const props = defineProps<Todo>();
-defineEmits<{
-  (e: 'update', val: Todo): void;
-  (e: 'delete', val: Todo): void;
-}>();
 const isDone: Ref<boolean> = toRef(props.isDone);
 const showText: Ref<boolean> = ref(false);
+const loading: Ref<boolean> = ref(false);
+
+async function update(): Promise<void> {
+  loading.value = true;
+  await todoState.updateTodo({ ...props, isDone: isDone.value });
+  loading.value = false;
+}
+
+async function remove(): Promise<void> {
+  loading.value = true;
+  await todoState.deleteTodo({ ...props });
+  loading.value = false;
+}
 </script>
 
 <template>
-  <v-card class="mb-4">
+  <v-card class="mb-4" :loading="loading">
     <v-card-item>
       <v-card-title>
         <div class="indicator bg-red-accent-3" :class="{ 'bg-green-accent-3': isDone }"></div>
         <p class="title">{{ title }}</p>
         <div class="commands">
-          <v-checkbox
-            color="primary"
-            v-model="isDone"
-            @change="$emit('update', { ...props, isDone })"
-            hide-details
-          >
+          <v-checkbox color="primary" v-model="isDone" @change="update" hide-details>
             <v-tooltip
               activator="parent"
               :text="isDone ? 'Mark as pending' : 'Mark as done'"
               location="bottom"
             ></v-tooltip>
           </v-checkbox>
-          <v-btn variant="text" icon size="x-small" color="error" @click="$emit('delete', props)">
+          <v-btn variant="text" icon size="x-small" color="error" @click="remove">
             <v-tooltip activator="parent" text="Delete todo item" location="bottom"></v-tooltip>
             <v-icon icon="mdi-delete-outline"></v-icon>
           </v-btn>
